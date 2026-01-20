@@ -3,33 +3,49 @@
 <head>
     <title>Pi Stats</title>
     <style>
-        body { font-family: sans-serif; background: #1a1a1a; color: white; text-align: center; }
-        .card { background: #333; padding: 20px; margin: 10px; border-radius: 10px; display: inline-block; min-width: 150px; }
-        h1 { color: #00ffcc; }
+        body { font-family: sans-serif; background: #1a1a1a; color: white; text-align: center; padding-top: 50px; }
+        .card { background: #333; padding: 20px; margin: 10px; border-radius: 10px; display: inline-block; min-width: 150px; border-bottom: 4px solid #00ffcc; }
+        h1 { color: #00ffcc; margin-bottom: 30px; }
+        .update-text { color: #888; margin-top: 20px; font-size: 0.9em; }
     </style>
 </head>
 <body>
     <h1>Pi System Monitor</h1>
+    
     <div class="card">
         <h3>CPU</h3>
         <p id="cpu">--%</p>
     </div>
+    
     <div class="card">
         <h3>RAM</h3>
         <p id="ram">--%</p>
     </div>
+
+    <div class="card">
+        <h3>DISK</h3>
+        <p id="disk">--%</p>
+    </div>
+
+    <p class="update-text">Last Updated: <span id="time">--:--:--</span></p>
 
     <script>
         async function loadStats() {
             try {
                 const res = await fetch('/api/stats');
                 const data = await res.json();
+                
                 document.getElementById('cpu').innerText = data.cpu_usage_percent + "%";
                 document.getElementById('ram').innerText = data.ram_usage_percent + "%";
-            } catch (e) { console.log("Waiting for Python data..."); }
+                document.getElementById('disk').innerText = data.disk_usage_percent + "%";
+                document.getElementById('time').innerText = data.last_updated;
+            } catch (e) { 
+                console.log("Connecting to Pi..."); 
+            }
         }
-        setInterval(loadStats, 10000); // Update every 10s
-        loadStats(); // Initial load
+        
+        setInterval(loadStats, 5000); // Updated to 5 seconds for snappier feel
+        loadStats(); 
     </script>
 </body>
 </html>

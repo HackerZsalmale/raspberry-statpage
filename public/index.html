@@ -1,16 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    
+    <title>Pi Stats</title>
+    <style>
+        body { font-family: sans-serif; background: #1a1a1a; color: white; text-align: center; }
+        .card { background: #333; padding: 20px; margin: 10px; border-radius: 10px; display: inline-block; min-width: 150px; }
+        h1 { color: #00ffcc; }
+    </style>
 </head>
 <body>
-    <div id="stats">
-        <h1>Statistics Page</h1>
-        <p>This is the statistics page content.</p>
+    <h1>Pi System Monitor</h1>
+    <div class="card">
+        <h3>CPU</h3>
+        <p id="cpu">--%</p>
     </div>
+    <div class="card">
+        <h3>RAM</h3>
+        <p id="ram">--%</p>
+    </div>
+
+    <script>
+        async function loadStats() {
+            try {
+                const res = await fetch('/api/stats');
+                const data = await res.json();
+                document.getElementById('cpu').innerText = data.cpu_usage_percent + "%";
+                document.getElementById('ram').innerText = data.ram_usage_percent + "%";
+            } catch (e) { console.log("Waiting for Python data..."); }
+        }
+        setInterval(loadStats, 10000); // Update every 10s
+        loadStats(); // Initial load
+    </script>
 </body>
-<script src="script.js"></script>
 </html>

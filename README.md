@@ -1,11 +1,11 @@
-Do these to start it: 
+Do these to start it: <br> 
 
-sudo apt install git
-git clone https://github.com/HackerZsalmale/raspberry-statpage
-sudo npm install pm2 -g
-cd /home/admin/raspberry-statpage
-pm2 delete all
-pm2 start stats.py --name "pi-stats" --interpreter python3
-pm2 start server.js --name "pi-server"
-pm2 startup
-pm2 save
+sudo apt install git <br>
+git clone https://github.com/HackerZsalmale/raspberry-statpage <br>
+sudo npm install pm2 -g <br>
+cd /home/admin/raspberry-statpage <br>
+pm2 delete all <br>
+pm2 start stats.py --name "pi-stats" --interpreter python3 <br>
+pm2 start server.js --name "pi-server" <br>
+pm2 startup <br> 
+pm2 save <br>

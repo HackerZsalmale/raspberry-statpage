@@ -52,5 +52,12 @@ def main():
 
         time.sleep(0.3)
 
+def name():
+    while True:
+        name = {
+            "host": subprocess.run(['echo', '$USER@$HOSTNAME'], stdout=subprocess.PIPE, text=True).stdout.strip()
+        }
+        time.sleep(10)
+
 if __name__ == "__main__":
     main()

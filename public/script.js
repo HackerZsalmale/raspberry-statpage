@@ -1,14 +1,12 @@
 // ---- config ----
-const POLL_MS = 1000;      // how often we ask the Pi for fresh numbers
-const HISTORY_LEN = 40;    // samples kept for each sparkline
-const SEGMENTS = 20;       // LED segments per meter
+const POLL_MS = 1000;    
+const HISTORY_LEN = 40;  
+const SEGMENTS = 20;      
 
 const METRICS = ['cpu', 'ram', 'disk'];
 const history = { cpu: [], ram: [], disk: [] };
 
-// Build the 20 LED segments once per meter. Color is fixed by position
-// (green -> amber -> red), matching a classic hardware level meter;
-// how many are "lit" is what changes as usage changes.
+
 function buildMeter(el) {
   el.innerHTML = '';
   for (let i = 0; i < SEGMENTS; i++) {
@@ -78,6 +76,7 @@ async function loadStats() {
     recordAndRender('cpu', data.cpu_usage_percent);
     recordAndRender('ram', data.ram_usage_percent);
     recordAndRender('disk', data.disk_usage_percent);
+    document.getElementById('name').textContent = data.host;
 
     document.getElementById('time').textContent = data.last_updated;
     setStatus(true);

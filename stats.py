@@ -1,6 +1,8 @@
 import subprocess
 import time
 import json 
+import getpass
+import socket
 
 def get_cpu_usage():
     try:
@@ -12,7 +14,9 @@ def get_cpu_usage():
                     if 'id' in part:
                         idle = float(part.split()[0])
                         return round(100.0 - idle, 2)
-    except: return 0.0
+    except Exception: 
+        return 0.0
+    return 0.0
 
 def get_ram_usage():
     try:
@@ -22,26 +26,33 @@ def get_ram_usage():
                 parts = line.split()
                 total, used = float(parts[1]), float(parts[2])
                 return round((used / total) * 100.0, 2)
-    except: return 0.0
+    except Exception: 
+        return 0.0
+    return 0.0
 
 def get_disk_usage():
     try:
         result = subprocess.run(['df', '-h', '/'], stdout=subprocess.PIPE, text=True)
         cols = result.stdout.split('\n')[1].split()
         return cols[4].replace('%', '') 
-    except: return "0"
+    except Exception: 
+        return "0"
+
+def get_host_name():
+    # Native Python calls replace subprocess cleanly
+    user = getpass.getuser()
+    host = socket.gethostname()
+    return f"{user}@{host}"
 
 def main():
     while True:
-
         stats = {
             "cpu_usage_percent": get_cpu_usage(),
             "ram_usage_percent": get_ram_usage(),
             "disk_usage_percent": int(get_disk_usage()),
             "last_updated": time.strftime("%Y-%m-%d %H:%M:%S"),
-            "host": name()
+            "host": get_host_name()
         }
-
 
         with open("stats.json", "w") as f:
             json.dump(stats, f, indent=4)
@@ -51,14 +62,7 @@ def main():
         print("Data written to stats.json")
         print(json.dumps(stats, indent=4)) 
 
-        time.sleep(0.3)
-
-def name():
-    while True:
-        name = {
-            "host": subprocess.check_output('echo $USER@$HOSTNAME', shell=True)
-        }
-        time.sleep(10)
+        time.sleep(1)
 
 if __name__ == "__main__":
     main()

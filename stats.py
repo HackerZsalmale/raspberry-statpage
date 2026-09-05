@@ -56,7 +56,7 @@ def main():
 def name():
     while True:
         name = {
-            "host": subprocess.run(['echo $USER@$HOSTNAME'], stdout=subprocess.PIPE, text=True).stdout.strip()
+            "host": subprocess.check_output('echo $USER@$HOSTNAME', shell=True)
         }
         time.sleep(10)
 

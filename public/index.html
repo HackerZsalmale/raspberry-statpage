@@ -1,51 +1,63 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Pi Stats</title>
-    <style>
-        body { font-family: sans-serif; background: #1a1a1a; color: white; text-align: center; padding-top: 50px; }
-        .card { background: #333; padding: 20px; margin: 10px; border-radius: 10px; display: inline-block; min-width: 150px; border-bottom: 4px solid #00ffcc; }
-        h1 { color: #00ffcc; margin-bottom: 30px; }
-        .update-text { color: #888; margin-top: 20px; font-size: 0.9em; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pi Monitor</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Pi System Monitor</h1>
-    
-    <div class="card">
-        <h3>CPU</h3>
-        <p id="cpu">--%</p>
-    </div>
-    
-    <div class="card">
-        <h3>RAM</h3>
-        <p id="ram">--%</p>
-    </div>
+  <div class="wrap">
 
-    <div class="card">
-        <h3>DISK</h3>
-        <p id="disk">--%</p>
+    <div class="top">
+      <div>
+        <h1>Raspberry Pi Monitor</h1>
+        <span class="host" id="host">local network</span>
+      </div>
+      <div class="status" id="status">
+        <span class="dot"></span>
+        <span id="statusText">Connecting…</span>
+      </div>
     </div>
 
-    <p class="update-text">Last Updated: <span id="time">--:--:--</span></p>
+    <div class="grid">
 
-    <script>
-        async function loadStats() {
-            try {
-                const res = await fetch('/api/stats');
-                const data = await res.json();
-                
-                document.getElementById('cpu').innerText = data.cpu_usage_percent + "%";
-                document.getElementById('ram').innerText = data.ram_usage_percent + "%";
-                document.getElementById('disk').innerText = data.disk_usage_percent + "%";
-                document.getElementById('time').innerText = data.last_updated;
-            } catch (e) { 
-                console.log("Connecting to Pi..."); 
-            }
-        }
-        
-        setInterval(loadStats, 300); // Updated to 5 seconds for snappier feel
-        loadStats(); 
-    </script>
+      <div class="panel" data-metric="cpu">
+        <p class="label">CPU</p>
+        <p class="readout"><span id="cpuValue">--</span><span class="unit">%</span></p>
+        <div class="meter" id="cpuMeter"></div>
+        <svg class="spark" id="cpuSpark" viewBox="0 0 100 32" preserveAspectRatio="none">
+          <polyline class="fill" points=""></polyline>
+          <polyline points=""></polyline>
+        </svg>
+      </div>
+
+      <div class="panel" data-metric="ram">
+        <p class="label">Memory</p>
+        <p class="readout"><span id="ramValue">--</span><span class="unit">%</span></p>
+        <div class="meter" id="ramMeter"></div>
+        <svg class="spark" id="ramSpark" viewBox="0 0 100 32" preserveAspectRatio="none">
+          <polyline class="fill" points=""></polyline>
+          <polyline points=""></polyline>
+        </svg>
+      </div>
+
+      <div class="panel" data-metric="disk">
+        <p class="label">Disk</p>
+        <p class="readout"><span id="diskValue">--</span><span class="unit">%</span></p>
+        <div class="meter" id="diskMeter"></div>
+        <svg class="spark" id="diskSpark" viewBox="0 0 100 32" preserveAspectRatio="none">
+          <polyline class="fill" points=""></polyline>
+          <polyline points=""></polyline>
+        </svg>
+      </div>
+
+    </div>
+
+    <p class="foot">Last updated: <span id="time">--:--:--</span></p>
+
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>

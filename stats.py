@@ -38,7 +38,8 @@ def main():
             "cpu_usage_percent": get_cpu_usage(),
             "ram_usage_percent": get_ram_usage(),
             "disk_usage_percent": int(get_disk_usage()),
-            "last_updated": time.strftime("%Y-%m-%d %H:%M:%S")
+            "last_updated": time.strftime("%Y-%m-%d %H:%M:%S"),
+            "host": name()
         }
 
 
